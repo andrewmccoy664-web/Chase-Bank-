@@ -1,61 +1,104 @@
-<<<<<<< HEAD
-# Chase-Bank-
-=======
-# Chase Bank Dashboard
+# why-is-node-running
 
-A modern, responsive banking dashboard built with React, TypeScript, and Tailwind CSS.
+Node is running but you don't know why? `why-is-node-running` is here to help you.
 
-## Project Structure
+## Installation
 
-```
-Chase Bank/
-├── Frontend/          # Main React application
-│   ├── src/          # Source code
-│   ├── public/       # Static assets
-│   ├── package.json  # Frontend dependencies
-│   └── vite.config.ts
-├── Design.jpeg       # UI design reference
-└── README.md         # This file
-```
-
-## Getting Started
-
-Navigate to the Frontend directory and install dependencies:
+Node 8 and above:
 
 ```bash
-cd Frontend
-npm install
-npm run dev
+npm i why-is-node-running -g
 ```
 
-The application will be available at `http://localhost:8080`
-
-## Building for Production
+Earlier Node versions (no longer supported):
 
 ```bash
-cd Frontend
-npm run build
+npm i why-is-node-running@v1.x -g
 ```
 
-The production build will be generated in `Frontend/dist/`
+## Usage
 
-## Features
+```js
+const log = require('why-is-node-running') // should be your first require
+const net = require('net')
 
-- Account Management
-- Transaction Tracking
-- Analytics and Reporting
-- Financial Summaries
-- Payment Processing
-- Trade Finance Management
+function createServer () {
+  const server = net.createServer()
+  setInterval(function () {}, 1000)
+  server.listen(0)
+}
 
-## Available Scripts
+createServer()
+createServer()
 
-From the Frontend directory:
+setTimeout(function () {
+  log() // logs out active handles that are keeping node running
+}, 100)
+```
 
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
-- `npm run preview` - Preview production build locally
-- `npm run lint` - Run ESLint
-- `npm run test` - Run tests
-- `npm run test:watch` - Run tests in watch mode
->>>>>>> 9ce87a0 (Initial commit)
+Save the file as `example.js`, then execute:
+
+```bash
+node ./example.js
+```
+
+Here's the output:
+
+```
+There are 5 handle(s) keeping the process running
+
+# Timeout
+/home/maf/dev/node_modules/why-is-node-running/example.js:6  - setInterval(function () {}, 1000)
+/home/maf/dev/node_modules/why-is-node-running/example.js:10 - createServer()
+
+# TCPSERVERWRAP
+/home/maf/dev/node_modules/why-is-node-running/example.js:7  - server.listen(0)
+/home/maf/dev/node_modules/why-is-node-running/example.js:10 - createServer()
+
+# Timeout
+/home/maf/dev/node_modules/why-is-node-running/example.js:6  - setInterval(function () {}, 1000)
+/home/maf/dev/node_modules/why-is-node-running/example.js:11 - createServer()
+
+# TCPSERVERWRAP
+/home/maf/dev/node_modules/why-is-node-running/example.js:7  - server.listen(0)
+/home/maf/dev/node_modules/why-is-node-running/example.js:11 - createServer()
+
+# Timeout
+/home/maf/dev/node_modules/why-is-node-running/example.js:13 - setTimeout(function () {
+```
+
+**Important Note!**
+`unref`ed timers do not prevent the Node process from exiting. If you are running with Node v11.0.0 and above, `unref`ed timers will not be listed in the above list. Unfortunately, this is not supported in node versions below v11.0.0.
+
+## CLI
+
+You can also run `why-is-node-running` as a standalone if you don't want to include it inside your code. Sending `SIGUSR1`/`SIGINFO` signal to the process will produce the log. (`Ctrl + T` on macOS and BSD systems)
+
+```bash
+why-is-node-running /path/to/some/file.js
+```
+
+```
+probing module /path/to/some/file.js
+kill -SIGUSR1 31115 for logging
+```
+
+To trigger the log:
+
+```
+kill -SIGUSR1 31115
+```
+
+## Require CLI Option
+
+You can also use the node `-r` option to include `why-is-node-running`:
+
+```bash
+node -r why-is-node-running/include /path/to/some/file.js
+```
+
+The steps are otherwise the same as the above CLI section
+
+## License
+
+MIT
